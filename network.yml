@@ -42,7 +42,7 @@ Resources:
         - Key: Name
           Value: !Ref EnvironmentName
           
-  myVPCGatewayAttachment:
+  myInternetGatewayAttachment:
     Type: AWS::EC2::VPCGatewayAttachment
     Properties:
       VpcId: !Ref myVPC
@@ -52,9 +52,9 @@ Resources:
   myPublicSubnet1:
     Type: AWS::EC2::Subnet
     Properties:
-      VpcId: !Ref VPC
+      VpcId: !Ref myVPC
       AvailabilityZone: !Select [ 0, !GetAZs '' ]
-      CirderBlock: !Ref PublicSubnet1CIDR
+      CidrBlock: !Ref PublicSubnet1CIDR
       MapPublicIpOnLaunch: true
       Tags: 
         - Key: Name
@@ -63,9 +63,9 @@ Resources:
   myPublicSubnet2:
     Type: AWS::EC2::Subnet
     Properties:
-      VpcId: !Ref VPC
+      VpcId: !Ref myVPC
       AvailabilityZone: !Select [ 1, !GetAZs '' ]
-      CirderBlock: !Ref PublicSubnet2CIDR
+      CidrBlock: !Ref PublicSubnet2CIDR
       MapPublicIpOnLaunch: true
       Tags: 
         - Key: Name
@@ -74,9 +74,9 @@ Resources:
   myPrivateSubnet1:
     Type: AWS::EC2::Subnet
     Properties:
-      VpcId: !Ref VPC
+      VpcId: !Ref myVPC
       AvailabilityZone: !Select [ 0, !GetAZs '' ]
-      CirderBlock: !Ref PrivateSubnet1CIDR
+      CidrBlock: !Ref PrivateSubnet1CIDR
       MapPublicIpOnLaunch: false
       Tags: 
         - Key: Name
@@ -85,9 +85,9 @@ Resources:
   myPrivateSubnet2:
     Type: AWS::EC2::Subnet
     Properties:
-      VpcId: !Ref VPC
+      VpcId: !Ref myVPC
       AvailabilityZone: !Select [ 1, !GetAZs '' ]
-      CirderBlock: !Ref PrivateSubnet2CIDR
+      CidrBlock: !Ref PrivateSubnet2CIDR
       MapPublicIpOnLaunch: false
       Tags: 
         - Key: Name
@@ -191,3 +191,65 @@ Resources:
     Properties:
       RouteTableId: !Ref myPrivateRouteTable2
       SubnetId: !Ref myPrivateSubnet2
+
+###############
+Outputs:
+  VPC:
+    Description: A reference to the created VPC
+    Value: !Ref myVPC
+    Export:
+      Name: !Sub ${EnvironmentName}-VPCID
+
+  VPCPublicRouteTable:
+    Description: Public Routing
+    Value: !Ref myPublicRouteTable
+    Export:
+      Name: !Sub ${EnvironmentName}-PUB-RT
+
+  VPCPrivateRouteTable1:
+    Description: Private Routing AZ1
+    Value: !Ref myPrivateRouteTable1
+    Export:
+      Name: !Sub ${EnvironmentName}-PRIV1-RT
+
+  VPCPrivateRouteTable2:
+    Description: Private Routing AZ2
+    Value: !Ref myPrivateRouteTable2
+    Export:
+      Name: !Sub ${EnvironmentName}-PRIV2-RT
+
+  PublicSubnets:
+    Description: A list of the public subnets
+    Value: !Join [ ",", [ !Ref myPublicSubnet1, !Ref myPublicSubnet2 ]]
+    Export:
+      Name: !Sub ${EnvironmentName}-PUB-SUBNETS
+
+  PrivateSubnets:
+    Description: A list of the private subnets
+    Value: !Join [ ",", [ !Ref myPrivateSubnet1, !Ref myPrivateSubnet2 ]]
+    Export:
+      Name: !Sub ${EnvironmentName}-PRIV-SUBNETS
+
+  PublicSubnet1:
+    Description: A reference to the public subnet in 1st AZ
+    Value: !Ref myPublicSubnet1
+    Export:
+      Name: !Sub ${EnvironmentName}-PUB-SUBNET1
+
+  PublicSubnet2:
+    Description: A reference to the public subnet in 2nd AZ
+    Value: !Ref myPublicSubnet2
+    Export:
+      Name: !Sub ${EnvironmentName}-PUB-SUBNET2
+
+  PrivateSubnet1:
+    Description: A reference to the private subnet in 1st AZ
+    Value: !Ref myPrivateSubnet1
+    Export:
+      Name: !Sub ${EnvironmentName}-PRIV-SUBNET1
+
+  PrivateSubnet2:
+    Description: A reference to the private subnet in 2nd AZ
+    Value: !Ref myPrivateSubnet2
+    Export:
+      Name: !Sub ${EnvironmentName}-PRIV-SUBNET2
