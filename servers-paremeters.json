@@ -2,5 +2,17 @@
     {
         "ParameterKey": "EnvironmentName",
         "ParameterValue": "hawa"
+    },
+    {
+        "ParameterKey": "ASGMinSize",
+        "ParameterValue": "1"
+    },
+    {
+        "ParameterKey": "ASGMaxSize",
+        "ParameterValue": "3"
+    },
+    {
+        "ParameterKey": "ASGDesiredSize",
+        "ParameterValue": "2"
     }
 ]
