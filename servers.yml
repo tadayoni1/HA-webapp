@@ -110,11 +110,12 @@ Resources:
       VPCZoneIdentifier:
       - Fn::ImportValue:
           !Sub "${EnvironmentName}-PRIV-SUBNETS"
-      LaunchConfiguration: !Ref myWebAppLaunchConfiguration
+      LaunchConfigurationName: !Ref myWebAppLaunchConfiguration
       MinSize: !Ref ASGMinSize
       MaxSize: !Ref ASGMaxSize
       DesiredCapacity: !Ref ASGDesiredSize
-      TargetGroupARNs: !Ref myWebAppTargetGroup
+      TargetGroupARNs:
+      - !Ref myWebAppTargetGroup
 
 # Load Balancer
   myWebAppLB:
