@@ -1,0 +1,42 @@
+[
+    {
+        "ParameterKey": "EnvironmentName",
+        "ParameterValue": "hawa"
+    },
+    {
+        "ParameterKey": "ASGMinSize",
+        "ParameterValue": "1"
+    },
+    {
+        "ParameterKey": "ASGMaxSize",
+        "ParameterValue": "3"
+    },
+    {
+        "ParameterKey": "ASGDesiredSize",
+        "ParameterValue": "1"
+    },
+    {
+        "ParameterKey": "HealthCheckIntervalSeconds",
+        "ParameterValue": "10"
+    },
+    {
+        "ParameterKey": "HealthCheckPath",
+        "ParameterValue": "/"
+    },
+    {
+        "ParameterKey": "HealthCheckProtocol",
+        "ParameterValue": "HTTP"
+    },
+    {
+        "ParameterKey": "HealthCheckTimeoutSeconds",
+        "ParameterValue": "8"
+    },
+    {
+        "ParameterKey": "HealthyThresholdCount",
+        "ParameterValue": "2"
+    },
+    {
+        "ParameterKey": "UnhealthyThresholdCount",
+        "ParameterValue": "2"
+    }
+]
