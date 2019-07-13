@@ -1,0 +1,56 @@
+Description:
+    This templates deploys compute resrouces for a high-avilability web app in AWS
+
+Parameters:
+  EnvironmentName:
+    Description: An Environment name that will be prefixed to resources
+    Type: String
+
+Resources:
+
+# Security Groups
+  myLB-SG:
+    Type: AWS::EC2::SecurityGroup
+    Properties: 
+      GroupDescription: Allow http traffic to LB
+      SecurityGroupEgress: 
+        - InProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+      SecurityGroupIngress: 
+        - InProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+      VpcId:
+        Fn::ImportValue:
+          !Sub "${EnviromentName}-VPCID"
+      Tags: 
+        - Key: Name
+          Value: !Sub "${EnviromentName}-LB"
+  myWebServerSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties: 
+      GroupDescription: Allow http traffic to the host and SSH locally
+      SecurityGroupEgress: 
+        - InProtocol: tcp
+          FromPort: 0
+          ToPort: 65535
+          CidrIp: 0.0.0.0/0
+      SecurityGroupIngress: 
+        - InProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          CidrIp: 0.0.0.0/0
+        - InProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+      VpcId:
+        Fn::ImportValue:
+          !Sub "${EnviromentName}-VPCID"
+      Tags: 
+        - Key: Name
+          Value: !Sub "${EnviromentName}-LB"
+
