@@ -38,5 +38,9 @@
     {
         "ParameterKey": "UnhealthyThresholdCount",
         "ParameterValue": "2"
+    },
+    {
+        "ParameterKey": "EC2InstanceRole",
+        "ParameterValue": "HawaInstance"
     }
 ]

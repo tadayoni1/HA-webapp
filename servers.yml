@@ -14,54 +14,70 @@ Parameters:
   ASGDesiredSize:
     Description: Desired number of servers in Auto Scaling Group
     Type: String
+  HealthCheckIntervalSeconds:
+    Type: String
+  HealthCheckPath:
+    Type: String
+  HealthCheckProtocol:
+    Type: String
+  HealthCheckTimeoutSeconds:
+    Type: String
+  HealthyThresholdCount:
+    Type: String
+  UnhealthyThresholdCount:
+    Type: String
+  EC2InstanceRole:
+    Description: The IAM role for the EC2 instances that host the web app
+    Type: String
 
 Resources:
 
 # Security Groups
-  myLB-SG:
+  myLBSG:
     Type: AWS::EC2::SecurityGroup
     Properties: 
       GroupDescription: Allow http traffic to LB
       SecurityGroupEgress: 
-        - InProtocol: tcp
+        - IpProtocol: tcp
           FromPort: 80
           ToPort: 80
           CidrIp: 0.0.0.0/0
       SecurityGroupIngress: 
-        - InProtocol: tcp
+        - IpProtocol: tcp
           FromPort: 80
           ToPort: 80
           CidrIp: 0.0.0.0/0
       VpcId:
         Fn::ImportValue:
-          !Sub "${EnviromentName}-VPCID"
+          !Sub "${EnvironmentName}-VPCID"
       Tags: 
         - Key: Name
-          Value: !Sub "${EnviromentName}-LB"
+          Value: !Sub "${EnvironmentName}-LB"
+
   myWebServerSG:
     Type: AWS::EC2::SecurityGroup
     Properties: 
       GroupDescription: Allow http traffic to the host and SSH locally
       SecurityGroupEgress: 
-        - InProtocol: tcp
+        - IpProtocol: tcp
           FromPort: 0
           ToPort: 65535
           CidrIp: 0.0.0.0/0
       SecurityGroupIngress: 
-        - InProtocol: tcp
+        - IpProtocol: tcp
           FromPort: 80
           ToPort: 80
           CidrIp: 0.0.0.0/0
-        - InProtocol: tcp
+        - IpProtocol: tcp
           FromPort: 22
           ToPort: 22
           CidrIp: 0.0.0.0/0
       VpcId:
         Fn::ImportValue:
-          !Sub "${EnviromentName}-VPCID"
+          !Sub "${EnvironmentName}-VPCID"
       Tags: 
         - Key: Name
-          Value: !Sub "${EnviromentName}-LB"
+          Value: !Sub "${EnvironmentName}-LB"
 
 # Auto Scaling Group
   myWebAppLaunchConfiguration:
@@ -79,7 +95,7 @@ Resources:
           unzip -o hawa.zip
       ImageId: ami-005bdb005fb00e791
       KeyName: automation
-      IamInstanceProfile: !Ref HawaInstance
+      IamInstanceProfile: !Ref EC2InstanceRole
       SecurityGroups:
       - Ref: myWebServerSG
       InstanceType: t2.micro
@@ -93,16 +109,57 @@ Resources:
     Properties:
       VPCZoneIdentifier:
       - Fn::ImportValue:
-          !Sub "${EnviromentName}-PRIV-NETS"
+          !Sub "${EnvironmentName}-PRIV-SUBNETS"
       LaunchConfiguration: !Ref myWebAppLaunchConfiguration
       MinSize: !Ref ASGMinSize
       MaxSize: !Ref ASGMaxSize
       DesiredCapacity: !Ref ASGDesiredSize
       TargetGroupARNs: !Ref myWebAppTargetGroup
 
+# Load Balancer
   myWebAppLB:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
       Subnets:
+      - Fn::ImportValue: !Sub "${EnvironmentName}-PUB-SUBNET1"
+      - Fn::ImportValue: !Sub "${EnvironmentName}-PUB-SUBNET2"
+      SecurityGroups:
+      - Ref: myLBSG
+
+  myListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+      - Type: forward
+        TargetGroupArn: !Ref myWebAppTargetGroup
+      LoadBalancerArn: !Ref myWebAppLB
+      Port: '80'
+      Protocol: HTTP
+  
+  myALBListenerRule:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      Actions:
+      - Type: forward
+        TargetGroupArn: !Ref myWebAppTargetGroup
+      Conditions:
+      - Field: path-pattern
+        Values: [/]
+      ListenerArn: !Ref 'myListener'
+      Priority: 1
+
+  myWebAppTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties: 
+      HealthCheckIntervalSeconds: !Ref HealthCheckIntervalSeconds
+      HealthCheckPath: !Ref HealthCheckPath
+      HealthCheckProtocol: !Ref HealthCheckProtocol
+      HealthCheckTimeoutSeconds: !Ref HealthCheckTimeoutSeconds
+      HealthyThresholdCount: !Ref HealthyThresholdCount
+      Port: 80
+      Protocol: HTTP
+      UnhealthyThresholdCount: !Ref UnhealthyThresholdCount
+      VpcId:
+        Fn::ImportValue: !Sub "${EnvironmentName}-VPCID"
 
 
