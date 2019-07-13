@@ -5,15 +5,15 @@
     },
     {
         "ParameterKey": "ASGMinSize",
-        "ParameterValue": "1"
+        "ParameterValue": "2"
     },
     {
         "ParameterKey": "ASGMaxSize",
-        "ParameterValue": "3"
+        "ParameterValue": "6"
     },
     {
         "ParameterKey": "ASGDesiredSize",
-        "ParameterValue": "1"
+        "ParameterValue": "4"
     },
     {
         "ParameterKey": "HealthCheckIntervalSeconds",

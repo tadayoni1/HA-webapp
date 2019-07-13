@@ -97,7 +97,7 @@ Resources:
       IamInstanceProfile: !Ref EC2InstanceRole
       SecurityGroups:
       - Ref: myWebServerSG
-      InstanceType: t2.micro
+      InstanceType: t3.small
       BlockDeviceMappings:
       - DeviceName: "/dev/sdk"
         Ebs:
