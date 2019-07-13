@@ -1,5 +1,5 @@
 Description:
-    This templates deploys a high-avilability web app in AWS
+    This templates deploys network infrastructure for a high-avilability web app in AWS
 
 Parameters:
   EnvironmentName:
