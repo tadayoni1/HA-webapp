@@ -94,7 +94,6 @@ Resources:
           aws s3 cp s3://tirgan-hawa/hawa.zip .
           unzip -o hawa.zip
       ImageId: ami-005bdb005fb00e791
-      KeyName: automation
       IamInstanceProfile: !Ref EC2InstanceRole
       SecurityGroups:
       - Ref: myWebServerSG
