@@ -1,5 +1,5 @@
 Description:
-    This templates deploys network infrastr high-avilability web app in AWS
+    This templates deploys network infrastructure for a high-avilability web app in AWS
 
 Parameters:
   EnvironmentName:
@@ -24,6 +24,9 @@ Parameters:
     Type: String
   EC2InstanceRole:
     Description: The IAM role for the EC2 instances that host the web app
+    Type: String
+  S3BucketName:
+    Description: The bucket to download the web app from
     Type: String
 
 
@@ -222,7 +225,7 @@ Resources:
           - 
             Effect: "Allow"
             Action: "s3:GetObject"
-            Resource: "arn:aws:s3:::tirgan-hawa/*"
+            Resource: !Sub arn:aws:s3:::${S3BucketName}/*
       Roles: 
         - 
           Ref: "myIAMRole"
