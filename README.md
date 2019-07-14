@@ -1,4 +1,4 @@
-# HA-webapp
+# hawa-cloudformation
 Deploy a high-availability web app using CloudFormation
 
 This code deploys a high-availability web app in AWS. It deploys 4 EC2 instances by default in 2 Availability zones. They are launched by a launch configuration that is used by an Auto-Scaling group. The EC2 instances are in a private subnet and users can reach them using a Load balancer that is in a public subnet.
