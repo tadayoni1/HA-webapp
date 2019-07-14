@@ -6,11 +6,18 @@ This code deploys a high-availability web app in AWS. It deploys 4 EC2 instances
 ![](https://github.com/tadayoni1/HA-webapp/blob/master/diagram.jpeg)
 
 
-**Deployment Steps**
+### Prerequisites
+User data on the scaling group downloads a zip file from an s3 bucket and unzips it to `/var/www/html`. 
+Thus you need 
+- A s3 bucket that gives permission to the IAM role for AutoScaling group which is defined in `network-parameters.json` as `EC2InstanceRole'.
+  - Also update `S3BucketName` in `network-parameters.json`
+- A zip file containing your web app
+
+### Deployment Steps
 
 Deployment is done in two steps. Each step is done through a stack
-1. First deploy Network Infrastructure and IAM role using ```./create_network.sh```
-2. Then deploy compute resources using ```./create_servers.sh```
+1. First deploy Network Infrastructure and IAM role using `./create_network.sh`
+2. Then deploy compute resources using `./create_servers.sh`
 
 
 
