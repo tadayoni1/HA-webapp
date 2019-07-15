@@ -7,6 +7,8 @@ This code deploys a high-availability web app in AWS. It deploys 4 EC2 instances
 
 
 ### Prerequisites
+You need an aws account, aws key id and access key and you need to run `aws configure` prior to running cloudformation scripts.
+
 User data on the scaling group downloads a zip file from an s3 bucket and unzips it to `/var/www/html`. 
 Thus you need 
 - A s3 bucket that gives permission to the IAM role for AutoScaling group which is defined in `network-parameters.json` as `EC2InstanceRole'.
