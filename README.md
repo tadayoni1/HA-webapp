@@ -10,11 +10,11 @@ The number of servers is configurable in `servers-parameters.json`
 ### Prerequisites
 You need an aws account, aws key id and access key and you need to run `aws configure` prior to running cloudformation scripts.
 
-User data on the scaling group downloads a zip file from an s3 bucket and unzips it to `/var/www/html`. 
+User data on the scaling group downloads a zip file from an s3 bucket and unzip it to `/var/www/html`. 
 Thus you need 
-- A s3 bucket that gives permission to the IAM role for AutoScaling group which is defined in `network-parameters.json` as `EC2InstanceRole'.
+- An S3 bucket that gives permission to the IAM role for AutoScaling group which is defined in `network-parameters.json` as `EC2InstanceRole'.
   - Also update `S3BucketName` in `network-parameters.json`
-- A zip file containing your web app
+- A zip file containing your web app. An `index.html` in the root folder of the Zip file must exist.
 
 ### Deployment Steps
 
